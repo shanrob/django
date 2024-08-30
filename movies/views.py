@@ -1,4 +1,5 @@
 from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Movie
 
@@ -24,3 +25,7 @@ def add(request):
     return HttpResponseRedirect('/movies')
 
   return render(request, 'movies/add.html')
+
+def delete(request, id):
+  movie = Movie.objects.get(pk=id).delete()
+  return HttpResponseRedirect('/movies')
