@@ -2,18 +2,26 @@ from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Movie
+from django.http import JsonResponse
+from movies.serializers import MovieSerializer
 
 def movies(request):
   data = Movie.objects.all()
-  print(data)
-  return render(request, 'movies/movies.html', {'movies': data})
-
-def home(request):
-    return HttpResponse('Home')
+  serializer = MovieSerializer(data, many=True)
+  return JsonResponse({'movies': serializer.data})
 
 def details(request, id):
   data = Movie.objects.get(pk=id)
-  return render(request, 'movies/details.html', {'movie': data})
+  serializer = MovieSerializer(data)
+  print(serializer.data)
+  return JsonResponse({'movie': serializer.data})
+
+# def details(request, id):
+#   data = Movie.objects.get(pk=id)
+#   return render(request, 'movies/details.html', {'movie': data})
+
+def home(request):
+    return HttpResponse('Home')
 
 def add(request):
   title = request.POST.get("title")
